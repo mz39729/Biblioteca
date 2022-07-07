@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 
 class PrestamoControlador
 {
@@ -12,12 +14,19 @@ class PrestamoControlador
         require_once("Controlador/LibroControlador.php");
     }
 
+
     public function index()
     {
-        $prestamo = new PrestamoModelo();
-        $data["prestamo"] = $prestamo->getPrestamos();
+        if (isset($_SESSION['username'])) {
 
-        require_once("Vista/prestamos.php");
+            $prestamo = new PrestamoModelo();
+            $data["prestamo"] = $prestamo->getPrestamos();
+
+            require_once("Vista/prestamos.php");
+        } else {
+
+            header('location: index.php');
+        }
     }
 
 
@@ -32,28 +41,34 @@ class PrestamoControlador
 
         require_once("Vista/prestarLibro.php");*/
 
-        $prestamo = new PrestamoModelo();
-        $nPrestamos = $prestamo->getPrestamo($isbn)->num_rows;
+        if (isset($_SESSION['username'])) { //validar session
 
-        $libro = new LibroModelo();
-        $nLibro = $libro->getLibroP($isbn)->num_rows;
+            $prestamo = new PrestamoModelo();
+            $nPrestamos = $prestamo->getPrestamo($isbn)->num_rows;
 
-        if (($nLibro - $nPrestamos) > 2) {
-            $dataLibro["libro"] = $libro->getLibro($isbn, $ejemplar);
+            $libro = new LibroModelo();
+            $nLibro = $libro->getLibroP($isbn)->num_rows;
 
-            $usuario = new UsuarioModelo();
-            $dataUsuario["usuario"] = $usuario->usuariosActivos();
+            if (($nLibro - $nPrestamos) > 2) {
+                $dataLibro["libro"] = $libro->getLibro($isbn, $ejemplar);
 
-            require_once("Vista/prestarLibro.php");
-        } else {
-            echo "<div id='success'>
+                $usuario = new UsuarioModelo();
+                $dataUsuario["usuario"] = $usuario->usuariosActivos();
+
+                require_once("Vista/prestarLibro.php");
+            } else {
+                echo "<div id='success'>
         <div class='alert alert-danger'>
         <strong>No se puede prestar mas ejemplares de este libro</strong>
         </div>
         </div>";
+            }
+            $libro = new LibroControlador();
+            $libro->index();
+        } else {
+
+            header('location: index.php');
         }
-        $libro = new LibroControlador();
-        $libro->index();
     }
 
     public function prestamo()
@@ -100,23 +115,26 @@ class PrestamoControlador
     public function devolver($isbn, $ejemplar)
     {
 
-        $prestamo = new PrestamoModelo();
-        $prestamo->eliminar($isbn, $ejemplar);
+        if (isset($_SESSION['username'])) { //validar session
+            $prestamo = new PrestamoModelo();
+            $prestamo->eliminar($isbn, $ejemplar);
 
+            $ins = $prestamo->eliminar($isbn, $ejemplar);
 
-
-        $ins = $prestamo->eliminar($isbn, $ejemplar);
-
-        if ($ins) {
-            echo "<script> alert('Libro Devuelto correctamente'); </script>";
-        } else {
-            echo "<div id='success'>
+            if ($ins) {
+                echo "<script> alert('Libro Devuelto correctamente'); </script>";
+            } else {
+                echo "<div id='success'>
                 <div class='alert alert-danger'>
                 <strong>Error al Devolver libro</strong>
                 </div>
                 </div>";
-        }
+            }
 
-        $this->index();
+            $this->index();
+        } else {
+
+            header('location: index.php');
+        }
     }
 }

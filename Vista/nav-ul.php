@@ -59,7 +59,7 @@
     <?php if (isset($_SESSION['username'])) { ?> 
     <li class="nav-item active">
         <a class="nav-link" href="index.php?c=Inicio&a=salir">
-            <i class="fas fa-solid fa-"></i>
+            <i class="fas fa-solid fa-x"></i>
             <span>Salir</span></a>
     </li>
     <?php } ?>

@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 class LibroControlador
 {
 
@@ -19,20 +19,24 @@ class LibroControlador
 
         //$categoriaL = new CategoriaModelo();
         //$cat["categoriaL"] = $categoriaL->getCategorias();
-        
+
         require("Vista/libros.php");
     }
 
     public function nuevo()
     {
-        $categoria = new CategoriaModelo();
-        $data["categoria"] = $categoria->getCategorias();
-        require_once("Vista/registrarLibros.php");
+        if (isset($_SESSION['username'])) { //validar session
+            $categoria = new CategoriaModelo();
+            $data["categoria"] = $categoria->getCategorias();
+            require_once("Vista/registrarLibros.php");
+        } else {
+
+            $this->index();
+        }
     }
 
     public function guardarLibro()
     {
-
 
         $isbn = $_POST['isbn'];
         $ejemplar = $_POST['ejemplar'];
@@ -42,7 +46,6 @@ class LibroControlador
 
 
         $libro = new LibroModelo();
-
 
         $ins = $libro->insertar($isbn, $ejemplar, $nombre, $categoria, $n_paginas);
 
@@ -61,43 +64,51 @@ class LibroControlador
 
     public function modificarLibro($isbn, $ejemplar)
     {
+        if (isset($_SESSION['username'])) { //validar session
 
-        $categoria = new CategoriaModelo();
-        $dataC["categoria"] = $categoria->getCategorias();
-        $libro = new LibroModelo();
-        $data["libro"] = $libro->getLibro($isbn, $ejemplar);
+            $categoria = new CategoriaModelo();
+            $dataC["categoria"] = $categoria->getCategorias();
+            $libro = new LibroModelo();
+            $data["libro"] = $libro->getLibro($isbn, $ejemplar);
 
-        
-        
-        require_once "Vista/libroModificar.php";
+            require_once "Vista/libroModificar.php";
+        } else {
+
+            $this->index();
+        }
     }
 
     public function modificar()
     {
+        if (isset($_SESSION['username'])) { //validar session
 
-        $isbnM = $_POST['isbnM'];
-        $ejemplarM = $_POST['ejemplarM'];
-        $nombre = $_POST['nombre'];
-        $categoria = $_POST['categoria'];
-        $n_paginas = $_POST['n_paginas'];
-        //isbn y codigo ejemplar originales
-        $isbn = $_POST['isbn'];
-        $ejemplar = $_POST['ejemplar'];
+            $isbnM = $_POST['isbnM'];
+            $ejemplarM = $_POST['ejemplarM'];
+            $nombre = $_POST['nombre'];
+            $categoria = $_POST['categoria'];
+            $n_paginas = $_POST['n_paginas'];
+            //isbn y codigo ejemplar originales
+            $isbn = $_POST['isbn'];
+            $ejemplar = $_POST['ejemplar'];
 
 
-        $libro = new LibroModelo();
-        $ins = $libro->modificar($isbnM, $ejemplarM, $nombre, $categoria, $n_paginas, $isbn, $ejemplar);
+            $libro = new LibroModelo();
+            $ins = $libro->modificar($isbnM, $ejemplarM, $nombre, $categoria, $n_paginas, $isbn, $ejemplar);
 
-        if ($ins) {
-            echo "<script> alert('Libro Modificado correctamente'); </script>";
-        } else {
-            echo "<div id='success'>
+            if ($ins) {
+                echo "<script> alert('Libro Modificado correctamente'); </script>";
+            } else {
+                echo "<div id='success'>
                 <div class='alert alert-danger'>
                 <strong>¡Error al guardar, verifique los datos que se intenta modificar! </strong>
                 </div>
                 </div>";
-        }
+            }
 
-        $this->index();
+            $this->index();
+        } else {
+
+            $this->index();
+        }
     }
 }

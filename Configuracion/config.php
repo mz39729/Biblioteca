@@ -1,6 +1,6 @@
 
 <?php
-define ("urlsite","/localhost/PrinsParcial03/");
+define ("urlsite","Biblioteca/");
 define("CONTROLADOR_PRINCIPAL","Inicio");
 define("ACCION_PRINCIPAL","index");
 

@@ -5,7 +5,7 @@ class Conexion
 
     public static function conectar()
     {
-        $link = new mysqli('localhost', 'root', '', 'biblioteca');
+        $link = new mysqli('192.168.1.13', 'debian', 'debian', 'biblioteca');
         if ($link->connect_errno) {
             echo "Falló la conexión a MySQL: (" . $link->connect_errno . ") " . $link->connect_error;
         }

@@ -7,9 +7,17 @@ class UsuarioControlador
         require_once("Modelo/UsuarioModelo.php");
     }
 
+    public function index()
+    {
+        $usuario = new UsuarioModelo();
+        $data["titulo"] = "usuarios";
+        $data["usuario"] = $usuario->getUsuarios();
+
+        require_once("Vista/usuarios.php");
+    }
+
     public function inicio()
     {
-
 
         $cedula = $_POST['cedula'];
         $password = $_POST['password'];
@@ -27,7 +35,6 @@ class UsuarioControlador
                 $_SESSION['tipo'] = $dataLogin["usuarioLogin"]['tipo'];
 
                 header('location: index.php');
-
             } else if ($dataLogin["usuarioLogin"]['cedula'] != $cedula && $dataLogin["usuarioLogin"]['pass'] != $password) {
                 echo  "<div id='success'>
                 <div class='alert alert-danger'>
@@ -48,14 +55,7 @@ class UsuarioControlador
         }
     }
 
-    public function index()
-    {
-        $usuario = new UsuarioModelo();
-        $data["titulo"] = "usuarios";
-        $data["usuario"] = $usuario->getUsuarios();
 
-        require_once("Vista/usuarios.php");
-    }
 
     public function nuevo()
     {
@@ -93,12 +93,16 @@ class UsuarioControlador
 
     public function modificarUsuario($cedula)
     {
+        if (isset($_SESSION['username'])) {
+            $usuario = new UsuarioModelo();
 
-        $usuario = new UsuarioModelo();
+            $data["cedula"] = $cedula;
+            $data["usuario"] = $usuario->getUsuario($cedula);
+            require_once "Vista/usuarioModificar.php";
+        } else {
 
-        $data["cedula"] = $cedula;
-        $data["usuario"] = $usuario->getUsuario($cedula);
-        require_once "Vista/usuarioModificar.php";
+           $this->index();
+        }
     }
 
     public function modificar()
