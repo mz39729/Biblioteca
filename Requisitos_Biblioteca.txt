@@ -1,0 +1,43 @@
+                Desarrollo de Aplicación Web 
+Requerimientos, 
+
+1.	Módulo de Estudiantes y profesores.
+    •	Construir un módulo para que estudiantes y profesores puedan registrarse:
+        o	Nombre
+        o	Cédula
+        o	Fecha de nacimiento (dd/mm/aaaa) 
+        o	Sexo
+        No es necesario que profesores y estudiantes hagan login. La única diferencia al momento de ser creado es que se debe seleccionar 
+        el tipo de usuario, entre docente y estudiante. Los usuarios de cualquier tipo no pueden tener la misma cédula. Una ves que se 
+        registren el Bibliotecarios debe activarlos para que puedan gozar de los servicios de la biblioteca.
+
+    •	Una persona registrada no podrá volverse a registrar, para ello debe revisarse que la cedula no se encuentre en el sistema.
+    •	Se debe listar los usuarios activos.
+    •	Se debe listar los usuarios inactivos.
+	
+2.	Modulo Bibliotecario. 
+
+    •	El bibliotecario deberá hacer login para ingresar a la aplicación. Con un usuario precargado en la base de datos 
+    •	Debe activar a los usuarios registrados seleccionándolos de una lista.
+    •	Se debe poder listar los usuarios diferenciando entre si son estudiantes o profesores. Se debe indicar cuantos libros tienen prestados.
+    •	El bibliotecario puede modificar los datos de un usuario realizando inicialmente una búsqueda por cedula. Posteriormente tendrá la 
+        posibilidad de modificar cualquiera de los campos menos la cedula.
+    •	Los libros de la biblioteca deben ser creados de la siguiente forma:
+        o	Nombre del Libro.
+        o	Código del Libro-ISBN.
+        o	Código de Ejemplar.
+        o	Categoría: debe existir que permita crear las categorías. No se puede eliminar una categoría si esta relacionada con un libro.
+        o	Numero de páginas.
+    •	Dos libros no pueden tener la misma combinación entre código del libro y código de ejemplar.
+    •	El bibliotecario podrá listar los libros de las siguientes formas:
+        o	Por código del Libro-ISBN.
+        o	Por número de páginas: se deben los libros que tengan menor o igual número de páginas.
+
+    •	Préstamo de libros: los es estudiantes solo pueden prestar máximo un libro y los profesores 4 libros. Además, solo se pueden prestar
+        libros que tengan máximo 2 ejemplares sin prestar. Para realizar el préstamo el bibliotecario buscara por medio del ISBN del Libro, 
+        listando todos los ejemplares disponibles, mostrando su código de ejemplar. Además, debe seleccionar de una lista de usuarios a la 
+        persona que prestara el libro.
+    •	Entrega de libro: selecciona de una lista el libro que desea devolver, al igual que el usuario que devuelve el libro.
+    •	Realizar listado de libros prestado o libros disponibles dependiendo de la opción solicitada. En caso de seleccionar los libros 
+        prestados se necesita que se muestre el usuario que los presto.
+
